@@ -1,5 +1,6 @@
 package registration;
 
+import application.Client;
 import application.User;
 import authorization.Authorization;
 import database.Database;
@@ -21,6 +22,9 @@ public class RegistrationController {
 	/** Property - database */
 	private Database database;
 
+	/** Property - client */
+	private Client client;
+
 	private final String[] NAMES_MONTHS;
 
 	{
@@ -28,6 +32,7 @@ public class RegistrationController {
 		this.NAMES_MONTHS = new String[] {"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"};
 		this.database = new Database();
+		this.client = new Client();
 
 	}
 
@@ -186,5 +191,25 @@ public class RegistrationController {
 		return true;
 
 	}
+
+	/**
+     * This method get object Client
+     * @return value of the object Client
+     * */
+    public Client getClient() {
+
+    	return this.client;
+
+    }
+
+    /**
+     * This method set value of the object Client
+     * @param client value of the object Client
+     * */
+    public void setClient(Client client) {
+
+    	this.client = client;
+
+    }
 
 }

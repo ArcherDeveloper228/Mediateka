@@ -1,5 +1,6 @@
 package authorization;
 
+import application.Client;
 import application.User;
 import database.Database;
 import javafx.fxml.FXML;
@@ -19,12 +20,21 @@ import registration.Registration;
  * @version 1.0
  * */
 public class AuthorizationController {
-	
+
 	/** Property - database */
 	private Database database;
-	
-	{ this.database = new Database(); }
-	
+
+	/** Property - client */
+	private Client client;
+
+	// логический блок для создания объекта клиента
+	{
+
+		this.database = new Database();
+		this.client = new Client();
+
+	}
+
     @FXML
     private TextField login_field;
 
@@ -45,7 +55,7 @@ public class AuthorizationController {
 
     @FXML
     private void initialize() {
-    	
+
     	// устанавливаем обработчик события для гиперссылки  registrationHyperlink
     	this.registration_hyperlink.setOnAction(event -> {
 
@@ -58,29 +68,29 @@ public class AuthorizationController {
     	this.button_signIn.setOnAction(event -> {
 
     		User user = null;
-    		
+
     		// выполняем поиск пользователя по логину
     		for (User check_user : this.database.getTable()) {
-    			
+
     			if (check_user.getUserLogin().equals(this.login_field.getText().trim())) user = check_user;
-    			
+
     		}
-    		
-    		// проверяем на правильное заполнение полей 
+
+    		// проверяем на правильное заполнение полей
     		if (this.login_field.getText().trim().equals("") || this.passwrod_field.getText().trim().equals("")) {
-    			
+
     			this.showDialogMessage("Attention", "You didn't enter login(password)!");
-    			
+
     		} else if (user == null || user.getUserPassword() != this.passwrod_field.getText().hashCode()) {
-    			
+
     			this.passwrod_field.setText("");
     			this.showDialogMessage("Attention", "Check your login or password!");
-    			
+
     		} else {
-    			
+
     			this.button_signIn.getScene().getWindow().hide();
         		new Mediateka().show();
-        	
+
     		}
 
     	});
@@ -94,20 +104,40 @@ public class AuthorizationController {
     	});
 
     }
-    
-    /** 
-     * This method creates dialog window and prints information 
+
+    /**
+     * This method creates dialog window and prints information
      * @param title value of the window title
-     * @param message value of the information message 
+     * @param message value of the information message
      * */
     public final void showDialogMessage(String title, String message) {
-    	
+
     	Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setTitle(title);
 		alert.setHeaderText("");
 		alert.setContentText(message);
 		alert.showAndWait();
-    	
+
+    }
+
+    /**
+     * This method get object Client
+     * @return value of the object Client
+     * */
+    public Client getClient() {
+
+    	return this.client;
+
+    }
+
+    /**
+     * This method set value of the object Client
+     * @param client value of the object Client
+     * */
+    public void setClient(Client client) {
+
+    	this.client = client;
+
     }
 
 }
