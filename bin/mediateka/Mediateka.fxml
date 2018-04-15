@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="885.0" style="-fx-background-color: #2E3348;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <AnchorPane layoutY="99.0" prefHeight="446.0" prefWidth="885.0" style="-fx-background-color: #ffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-0.20000000000004547" />
-      <TextField layoutX="632.0" layoutY="14.0" prefHeight="29.0" prefWidth="182.0" promptText="Search" />
-      <Button layoutX="819.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="47.0" style="-fx-background-color: #F4A460; -fx-background-radius: 5;" text="Ok">
-         <font>
-            <Font name="Georgia" size="15.0" />
-         </font>
-      </Button>
-      <Button layoutX="756.0" layoutY="55.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="110.0" style="-fx-background-radius: 5px; -fx-background-color: #F4A460;" text="Exit">
-         <font>
-            <Font name="Georgia" size="15.0" />
-         </font>
-      </Button>
-      <Button layoutX="632.0" layoutY="55.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="110.0" style="-fx-background-color: #F4A460; -fx-background-radius: 5;" text="Change user">
-         <font>
-            <Font name="Georgia" size="15.0" />
-         </font>
-      </Button>
-   </children>
-</AnchorPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" />

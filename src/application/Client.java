@@ -21,22 +21,21 @@ public class Client {
 	/** Property - socket */
 	private Socket socket;
 	
-	/** Property - object_output_stream */
-	private ObjectOutputStream object_output_stream;
-	
 	/** Property - print_stream */
 	private PrintStream print_stream;
 	
 	/** Property - buffered_reader */
 	private BufferedReader buffered_reader;
 	
+	private ObjectOutputStream object_output_stream;
+	
 	// логический блок для обнуления объектов
 	{
 		
 		this.socket = null;
-		this.object_output_stream = null;
 		this.print_stream = null;
 		this.buffered_reader = null;
+		this.object_output_stream = null;
 		
 	}
 	
@@ -48,9 +47,9 @@ public class Client {
 		try {
 			
 			this.socket = new Socket(InetAddress.getLocalHost(), 9999);
-			this.object_output_stream = (ObjectOutputStream) this.socket.getOutputStream();
 			this.print_stream = new PrintStream(this.socket.getOutputStream());
 			this.buffered_reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+			this.object_output_stream = new ObjectOutputStream(this.socket.getOutputStream());
 			
 		} catch (ConnectException e) {
 			
@@ -67,21 +66,20 @@ public class Client {
 		
 	}
 	
+	public void registrationUser(User user) {
+		
+		try {
+			this.object_output_stream.writeObject(user);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	/**
 	 * This method delete connection with server
 	 * */
-	public void closeConnection() {
-		
-		// если поток записи не null, то закрываем его
-		if (this.object_output_stream != null) {
-			
-			try {
-				this.object_output_stream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}			
+	public void closeConnection() {			
 		
 		// если поток записи не null, то закрываем его
 		if (this.print_stream != null) this.print_stream.close();
@@ -110,6 +108,56 @@ public class Client {
 		
 	}
 	
+	/**
+	 * This method return value of the object PrintStream
+	 * @return value of the object PrintStream
+	 * */
+	public PrintStream getPrintStream() {
+		
+		return this.print_stream;
+		
+	}
 	
-
+	/**
+	 * This method set value of the object PrintStream
+	 * @param print_stream value of the object PrintStream
+	 * */
+	public void setPrintStream(PrintStream print_stream) {
+		
+		this.print_stream = print_stream;
+		
+	}
+	
+	/**
+	 * This method return value of the object BufferedReader
+	 * @return value of the object BufferedReader
+	 * */
+	public BufferedReader getBufferedReader() {
+		
+		return this.buffered_reader;
+		
+	}
+	
+	/**
+	 * This method set value of the object BufferedReader
+	 * @param buffered_reader value of the object BufferedReader
+	 * */
+	public void setBufferedReader(BufferedReader buffered_reader) {
+		
+		this.buffered_reader = buffered_reader;
+		
+	}
+	
+	public ObjectOutputStream getObjectOutputStream() {
+		
+		return this.object_output_stream;
+		
+	}
+	
+	public void setObjectOutputStream(ObjectOutputStream object_output_stream) {
+		
+		this.object_output_stream = object_output_stream;
+		
+	}
+	
 }
