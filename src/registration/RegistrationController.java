@@ -1,8 +1,10 @@
 package registration;
 
-import application.Client;
+import com.google.gson.Gson;
+
 import application.User;
 import authorization.Authorization;
+import client.Client;
 import database.Database;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,9 +21,6 @@ import javafx.scene.control.ToggleGroup;
  * */
 public class RegistrationController {
 
-	/** Property - database */
-	private Database database;
-
 	/** Property - client */
 	private Client client;
 
@@ -31,7 +30,6 @@ public class RegistrationController {
 
 		this.NAMES_MONTHS = new String[] {"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"};
-		this.database = new Database();
 		this.client = new Client();
 
 	}
@@ -131,14 +129,10 @@ public class RegistrationController {
 				this.confirm_password.setText("");
 				this.showDialogMessage("Attention", "Please, check your password!");
 
-			} else if (!this.checkLogin(this.login_field.getText().trim()))
-				this.showDialogMessage("Attention", "Account with this name already exists!");
-			else {
-
-				User user = new User();
-
-				this.makeUser(user);
-				this.database.addUser(user);
+			} else {
+				
+				this.client.getClientInterface().writeMessage(this.makeUser());
+				
 				this.button_registration.getScene().getWindow().hide();
 
 			}
@@ -166,8 +160,10 @@ public class RegistrationController {
 	 * This method make user
 	 * @param user it is object contains information about user
 	 * */
-	private final void makeUser(User user) {
+	private final User makeUser() {
 
+		User user = new User();
+		
 		user.setName(this.name_field.getText());
 		user.setSurname(this.surname_field.getText());
 		user.setDayOfBirth(this.day_box.getValue());
@@ -178,17 +174,8 @@ public class RegistrationController {
 
 		if (this.radio_man.isSelected()) user.setSex(this.radio_man.getText());
 		else user.setSex(this.radio_woman.getText());
-
-	}
-
-	/**
-	 *
-	 * */
-	private final boolean checkLogin(String login) {
-
-		for (User user : this.database.getTable()) if (user.getUserLogin().equals(login)) return false;
-
-		return true;
+		
+		return user;
 
 	}
 

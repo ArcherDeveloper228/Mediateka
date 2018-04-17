@@ -7,10 +7,7 @@ import java.io.Serializable;
  * @author Nikita.Ustyshenko
  * @version 1.0
  * */
-public class Person implements Serializable {
-
-	/** Property - serialVersionUID */
-	private static final long serialVersionUID = -4758317152147922175L;
+public class Person { 
 
 	/** Property - name */
 	private String name;

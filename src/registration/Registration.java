@@ -9,48 +9,36 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
- * This class contains information about window for registration user 
- * @author Nikita.Ustyushenko 
+ * This class contains information about window for registration user
+ * @author Nikita.Ustyushenko
  * @version 1.0
  * */
-public class Registration extends Stage {
+public class Registration extends Stage implements ConstRegistration{
 
-	/** Property - TITLE_WINDOW */
-	private final String TITLE_IMAGE;
-	
-	/** Property - TITLE_IMAGE */
-	private final String TITLE_WINDOW;
-	
 	/** Property - image */
 	private final Image image;
-	
+
+	/** Property - pane */
 	private AnchorPane pane;
-	
-	// логический блок для инициализации константных свойств окна
-	{ 
-		
-		this.TITLE_WINDOW = new String("Registration"); 
-		this.TITLE_IMAGE = new String("cd.png");
-		this.image = new Image(this.getClass().getResourceAsStream(this.TITLE_IMAGE));
-		
-	}
-	
+
 	/** Make new window for registration */
 	public Registration() {
-		
+
+		this.image = new Image(this.getClass().getResourceAsStream(TITLE_IMAGE));
+
 		try {
-			this.pane = (AnchorPane)FXMLLoader.load(Registration.class.getResource("Registration.fxml"));
+			this.pane = (AnchorPane)FXMLLoader.load(Registration.class.getResource(TITLE_DOC));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// задаем параметры окна регистрации пользователя(название, сцена, запрет на растягивание окна)
 		super.getIcons().add(this.image);
 		super.setResizable(false);
-		super.setTitle(this.TITLE_WINDOW);
+		super.setTitle(TITLE_WINDOW);
 		super.setScene(new Scene(this.pane));
 		super.show();
-		
+
 	}
-	
+
 }

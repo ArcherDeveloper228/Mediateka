@@ -7,14 +7,11 @@ package application;
  *  */
 public class User extends Person {
 
-	/** Property - serialVersionUID */
-	private static final long serialVersionUID = -9111318358823063322L;
-
 	/** Property - user_login */
 	private String user_login;
 
 	/** Property - user_password */
-	private int user_password;
+	private long user_password;
 
 	/**
 	 * Make new object User
@@ -38,7 +35,7 @@ public class User extends Person {
 	 * @param user_password value contains information about user password
 	 * */
 	public User(String user_name, String user_surname, int day_of_birth, String month_of_birth,
-			int year_of_birth, String sex, String user_login, int user_password) {
+			int year_of_birth, String sex, String user_login, long user_password) {
 
 		super(user_name, user_surname, day_of_birth, month_of_birth, year_of_birth, sex);
 		this.user_login = user_login;
@@ -78,7 +75,7 @@ public class User extends Person {
 	 * This method returns the value of the user hash code password
 	 * @return String value of the user hash code password
 	 * */
-	public int getUserPassword() {
+	public long getUserPassword() {
 
 		return this.user_password;
 
@@ -88,7 +85,7 @@ public class User extends Person {
 	 * This method sets value of the user password
 	 * @param user_password value of the user password
 	 * */
-	public void setUserPassword(int user_password) {
+	public void setUserPassword(long user_password) {
 
 		this.user_password = user_password;
 

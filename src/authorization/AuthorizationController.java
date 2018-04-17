@@ -1,7 +1,7 @@
 package authorization;
 
-import application.Client;
 import application.User;
+import client.Client;
 import database.Database;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -20,7 +20,7 @@ import registration.Registration;
  * @version 1.0
  * */
 public class AuthorizationController {
-
+	
 	/** Property - database */
 	private Database database;
 
@@ -75,7 +75,7 @@ public class AuthorizationController {
     			if (check_user.getUserLogin().equals(this.login_field.getText().trim())) user = check_user;
 
     		}
-    		
+
     		this.checkUser(this.login_field.getText(), this.passwrod_field.getText().hashCode());
 
     		// проверяем на правильное заполнение полей
@@ -121,14 +121,11 @@ public class AuthorizationController {
 		alert.showAndWait();
 
     }
-    
+
     private final boolean checkUser(String login, int password) {
-    	
-    	this.client.getPrintStream().println(login);
-    	this.client.getPrintStream().println(password);
-    	
+
     	return true;
-    	
+
     }
 
     /**
