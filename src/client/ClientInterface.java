@@ -32,6 +32,10 @@ public class ClientInterface implements ConstClient {
 		
 	}
 	
+	/**
+	 * Make new object ClietnInterface
+	 * @param socket value of the object socket
+	 * */
 	public ClientInterface(Socket socket) {
 		
 		try {
@@ -51,7 +55,7 @@ public class ClientInterface implements ConstClient {
 	 * @param json 
 	 * */
 	@Override
-	public boolean writeMessage(User user) {
+	public boolean writeMessage(User user, String server_comand) {
 		
 		if (this.print_stream == null) return false;
 		
@@ -59,6 +63,7 @@ public class ClientInterface implements ConstClient {
 		json.toJson(user);
 		
 		this.print_stream.println(json);
+		this.print_stream.println(server_comand);
 		
 		return true;
 		

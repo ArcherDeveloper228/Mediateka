@@ -19,7 +19,7 @@ import javafx.scene.control.ToggleGroup;
  * @author Nikita.Ustyshenko
  * @version 1.0
  * */
-public class RegistrationController {
+public class RegistrationController implements ConstRegistration {
 
 	/** Property - client */
 	private Client client;
@@ -131,7 +131,7 @@ public class RegistrationController {
 
 			} else {
 				
-				this.client.getClientInterface().writeMessage(this.makeUser());
+				this.client.getClientInterface().writeMessage(this.makeUser(), TITLE_WINDOW);
 				
 				this.button_registration.getScene().getWindow().hide();
 

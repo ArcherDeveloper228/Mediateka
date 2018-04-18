@@ -1,7 +1,5 @@
 package application;
 
-import java.io.Serializable;
-
 /**
  * This class contains information about person
  * @author Nikita.Ustyshenko
