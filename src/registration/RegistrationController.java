@@ -1,11 +1,8 @@
 package registration;
 
-import com.google.gson.Gson;
-
 import application.User;
 import authorization.Authorization;
 import client.Client;
-import database.Database;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -130,10 +127,14 @@ public class RegistrationController implements ConstRegistration {
 				this.showDialogMessage("Attention", "Please, check your password!");
 
 			} else {
-				
-				this.client.getClientInterface().writeMessage(this.makeUser(), TITLE_WINDOW);
-				
-				this.button_registration.getScene().getWindow().hide();
+
+				if (this.client.getClientInterface().writeMessage(this.makeUser(), TITLE_WINDOW))
+					this.button_registration.getScene().getWindow().hide();
+				else {
+
+					this.showDialogMessage("Attention", "’з, что произошло=)");
+
+				}
 
 			}
 
@@ -163,7 +164,7 @@ public class RegistrationController implements ConstRegistration {
 	private final User makeUser() {
 
 		User user = new User();
-		
+
 		user.setName(this.name_field.getText());
 		user.setSurname(this.surname_field.getText());
 		user.setDayOfBirth(this.day_box.getValue());
@@ -174,7 +175,7 @@ public class RegistrationController implements ConstRegistration {
 
 		if (this.radio_man.isSelected()) user.setSex(this.radio_man.getText());
 		else user.setSex(this.radio_woman.getText());
-		
+
 		return user;
 
 	}

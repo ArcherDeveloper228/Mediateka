@@ -2,7 +2,6 @@ package authorization;
 
 import application.User;
 import client.Client;
-import database.Database;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,20 +19,12 @@ import registration.Registration;
  * @version 1.0
  * */
 public class AuthorizationController {
-	
-	/** Property - database */
-	private Database database;
 
 	/** Property - client */
 	private Client client;
 
 	// логический блок для создания объекта клиента
-	{
-
-		this.database = new Database();
-		this.client = new Client();
-
-	}
+	{ this.client = new Client(); }
 
     @FXML
     private TextField login_field;
@@ -52,8 +43,7 @@ public class AuthorizationController {
 
     @FXML
     private Label password_label;
-
-    @FXML
+	@FXML
     private void initialize() {
 
     	// устанавливаем обработчик события для гиперссылки  registrationHyperlink
@@ -69,15 +59,6 @@ public class AuthorizationController {
 
     		User user = null;
 
-    		// выполняем поиск пользователя по логину
-    		for (User check_user : this.database.getTable()) {
-
-    			if (check_user.getUserLogin().equals(this.login_field.getText().trim())) user = check_user;
-
-    		}
-
-    		this.checkUser(this.login_field.getText(), this.passwrod_field.getText().hashCode());
-
     		// проверяем на правильное заполнение полей
     		if (this.login_field.getText().trim().equals("") || this.passwrod_field.getText().trim().equals("")) {
 
@@ -89,7 +70,7 @@ public class AuthorizationController {
     			this.showDialogMessage("Attention", "Check your login or password!");
 
     		} else {
-
+    			
     			this.button_signIn.getScene().getWindow().hide();
         		new Mediateka().show();
 
@@ -119,12 +100,6 @@ public class AuthorizationController {
 		alert.setHeaderText("");
 		alert.setContentText(message);
 		alert.showAndWait();
-
-    }
-
-    private final boolean checkUser(String login, int password) {
-
-    	return true;
 
     }
 

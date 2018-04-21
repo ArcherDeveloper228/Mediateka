@@ -73,5 +73,25 @@ public class Client {
 		this.client_interface = client_interface;
 
 	}
+	
+	/**
+	 * This method return value of the object Socket
+	 * @return value of the object Socket
+	 * */
+	public Socket getSocket() {
+		
+		return this.socket;
+		
+	}
+	
+	/**
+	 * This method set value of the object Socket 
+	 * @param socket value of the object socket
+	 * */
+	public void setSocket(Socket socket) {
+		
+		this.socket = socket;
+		
+	}
 
 }
