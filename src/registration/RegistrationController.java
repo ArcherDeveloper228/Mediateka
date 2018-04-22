@@ -27,7 +27,6 @@ public class RegistrationController implements ConstRegistration {
 
 		this.NAMES_MONTHS = new String[] {"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"};
-		this.client = new Client();
 
 	}
 
@@ -107,7 +106,8 @@ public class RegistrationController implements ConstRegistration {
 
 		// устанавливаем обработчик события для кнопки button_cancel
 		this.button_cancel.setOnAction(event -> {
-
+			
+			if (this.client != null) this.client.closeConnection();
 			this.button_cancel.getScene().getWindow().hide();
 			new Authorization().show();
 
@@ -115,7 +115,7 @@ public class RegistrationController implements ConstRegistration {
 
 		// устанавливаем обработчик события для кнопки button_registration
 		this.button_registration.setOnAction(event -> {
-
+			
 			// выполняем проверку на заполнение информационных графических элементов
 			if (this.name_field.getText().trim().equals("") || this.surname_field.getText().trim().equals("") ||
 					this.login_field.getText().trim().equals("") || this.password_field.getText().trim().equals("") ||
@@ -128,6 +128,8 @@ public class RegistrationController implements ConstRegistration {
 
 			} else {
 
+				this.client = new Client();
+				
 				if (this.client.getClientInterface().writeMessage(this.makeUser(), TITLE_WINDOW))
 					this.button_registration.getScene().getWindow().hide();
 				else {

@@ -55,6 +55,27 @@ public class Client {
 	}
 
 	/**
+	 * This method close connection with socket
+	 * */
+	public void closeConnection() {
+
+		// закрываем все созданные I/O потоки
+		this.client_interface.closeConnection();
+
+		// если сокет не null, то разрываем соединение с сервером
+		if (this.socket != null) {
+
+			try {
+				this.socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	/**
 	 * This method return value of the object ClientInterface
 	 * @return value of the object ClientInterface
 	 * */
@@ -73,25 +94,25 @@ public class Client {
 		this.client_interface = client_interface;
 
 	}
-	
+
 	/**
 	 * This method return value of the object Socket
 	 * @return value of the object Socket
 	 * */
 	public Socket getSocket() {
-		
+
 		return this.socket;
-		
+
 	}
-	
+
 	/**
-	 * This method set value of the object Socket 
+	 * This method set value of the object Socket
 	 * @param socket value of the object socket
 	 * */
 	public void setSocket(Socket socket) {
-		
+
 		this.socket = socket;
-		
+
 	}
 
 }

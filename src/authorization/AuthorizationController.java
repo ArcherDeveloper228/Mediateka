@@ -23,9 +23,6 @@ public class AuthorizationController {
 	/** Property - client */
 	private Client client;
 
-	// логический блок для создания объекта клиента
-	{ this.client = new Client(); }
-
     @FXML
     private TextField login_field;
 
@@ -49,6 +46,7 @@ public class AuthorizationController {
     	// устанавливаем обработчик события для гиперссылки  registrationHyperlink
     	this.registration_hyperlink.setOnAction(event -> {
 
+    		if (this.client != null) this.client.closeConnection();
     		this.registration_hyperlink.getScene().getWindow().hide();
     		new Registration().show();
 
@@ -57,19 +55,14 @@ public class AuthorizationController {
     	// устанавливаем обработчик события для кнопки button_signIn
     	this.button_signIn.setOnAction(event -> {
 
-    		User user = null;
-
     		// проверяем на правильное заполнение полей
     		if (this.login_field.getText().trim().equals("") || this.passwrod_field.getText().trim().equals("")) {
 
     			this.showDialogMessage("Attention", "You didn't enter login(password)!");
 
-    		} else if (user == null || user.getUserPassword() != this.passwrod_field.getText().hashCode()) {
-
-    			this.passwrod_field.setText("");
-    			this.showDialogMessage("Attention", "Check your login or password!");
-
     		} else {
+
+    			this.client = new Client();
     			
     			this.button_signIn.getScene().getWindow().hide();
         		new Mediateka().show();
