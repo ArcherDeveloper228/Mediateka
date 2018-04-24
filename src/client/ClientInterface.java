@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import application.User;
 import json.JsonParser;
+import json.UserComand;
 
 public class ClientInterface implements ConstClient {
 
@@ -63,6 +64,7 @@ public class ClientInterface implements ConstClient {
 		else {
 
 			this.print_stream.println(this.json_parser.makeUserJson(user, server_command));
+			this.print_stream.flush();
 			return true;
 
 		}
@@ -71,9 +73,21 @@ public class ClientInterface implements ConstClient {
 
 	// реализация метода чтения информации от сервера
 	@Override
-	public String readMessage() {
+	public UserComand readMessage() {
 
-		return new String();
+		UserComand user_command = null;
+		String json = null;
+
+		try {
+
+			if ((json = this.buffered_reader.readLine()) != null)
+				user_command = this.json_parser.parseUserJson(json);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return user_command;
 
 	}
 

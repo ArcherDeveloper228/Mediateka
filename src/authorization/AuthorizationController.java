@@ -10,6 +10,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import json.UserComand;
 import mediateka.Mediateka;
 import registration.Registration;
 
@@ -18,7 +19,7 @@ import registration.Registration;
  * @author Nikita.Ustyshenko
  * @version 1.0
  * */
-public class AuthorizationController {
+public class AuthorizationController implements ConstAuthorization {
 
 	/** Property - client */
 	private Client client;
@@ -62,10 +63,28 @@ public class AuthorizationController {
 
     		} else {
 
-    			this.client = new Client();
+    			User user = new User();
+    			user.setUserLogin(this.login_field.getText().trim());
+    			user.setUserPassword(this.passwrod_field.getText().trim());
     			
-    			this.button_signIn.getScene().getWindow().hide();
-        		new Mediateka().show();
+    			this.client = new Client();
+    			this.client.getClientInterface().writeMessage(user, TITLE_WINDOW);
+    			
+    			UserComand user_command = this.client.getClientInterface().readMessage();
+    			
+    			if (user_command.getCommand().equals("Ok")) {
+    				
+    				this.client.closeConnection();
+    				this.button_signIn.getScene().getWindow().hide();
+    				new Mediateka().show();
+    				
+    			} else {
+    				
+    				this.client.closeConnection();
+    				this.passwrod_field.setText("");
+    				this.showDialogMessage("Attention", user_command.getCommand());
+    				
+    			} 
 
     		}
 
