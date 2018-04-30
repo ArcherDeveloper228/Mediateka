@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.NoRouteToHostException;
 import java.net.Socket;
 
 import javafx.scene.control.Alert;
@@ -18,6 +19,7 @@ public class Client {
 	private static int port = 9999;
 
 	/** Property - address */
+	//private static String address = new String("10.1.130.180");
 	private static String address = new String("127.0.0.1");
 
 	/** Property - client_interface */
@@ -39,21 +41,37 @@ public class Client {
 			this.socket = new Socket(InetAddress.getByName(address), port);
 			this.client_interface  = new ClientInterface(this.socket);
 
-		} catch (ConnectException e) {
+		} catch (ConnectException e1) {
 
-			Alert alert = new Alert(Alert.AlertType.WARNING);
-			alert.setTitle("Attention");
-			alert.setHeaderText("");
-			alert.setContentText("Server doesn't answer!");
-			alert.showAndWait();
+			this.showDialogMessage("Attention", "Server doesn't answer!");
 			System.exit(-1);
 
+		} catch (NoRouteToHostException e2) {
+			
+			this.showDialogMessage("Attention", "Server doesn't answer!");
+			System.exit(-1);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * This method make dialog message window
+	 * @param title title dialog window 
+	 * @param message message dialog window
+	 * */
+	public void showDialogMessage(String title, String message) {
+		
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText("");
+		alert.setContentText(message);
+		alert.showAndWait();
+		
+	}
+	
 	/**
 	 * This method close connection with socket
 	 * */

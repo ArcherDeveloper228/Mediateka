@@ -23,6 +23,12 @@ public class AuthorizationController implements ConstAuthorization {
 
 	/** Property - client */
 	private Client client;
+	
+	// выполняем пробное подключение  серверу
+	{
+		this.client = new Client();
+		this.client.closeConnection();
+	}
 
     @FXML
     private TextField login_field;
@@ -41,6 +47,7 @@ public class AuthorizationController implements ConstAuthorization {
 
     @FXML
     private Label password_label;
+    
 	@FXML
     private void initialize() {
 
