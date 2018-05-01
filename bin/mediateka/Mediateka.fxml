@@ -14,14 +14,14 @@
    <children>
       <AnchorPane layoutX="-7.0" layoutY="111.0" prefHeight="567.0" prefWidth="958.0" style="-fx-background-color: #FFFF;">
          <children>
-            <TabPane prefHeight="518.0" prefWidth="958.0" tabClosingPolicy="UNAVAILABLE" fx:id="tab_pane">
+            <TabPane fx:id="tab_pane" prefHeight="518.0" prefWidth="958.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Images">
                      <content>
                         <AnchorPane prefHeight="476.0" prefWidth="958.0">
                            <children>
-                              <ListView prefHeight="460.0" prefWidth="270.0" />
-                              <ImageView fitHeight="424.0" fitWidth="505.0" layoutX="349.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" />
+                              <ListView fx:id="images_list_view" prefHeight="460.0" prefWidth="270.0" />
+                              <ImageView fx:id="image_view" fitHeight="446.0" fitWidth="635.0" layoutX="291.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -30,7 +30,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="958.0">
                            <children>
-                              <ListView prefHeight="460.0" prefWidth="270.0" />
+                              <ListView fx:id="music_list_view" prefHeight="460.0" prefWidth="270.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -39,7 +39,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="476.0" prefWidth="958.0">
                            <children>
-                              <ListView prefHeight="460.0" prefWidth="270.0" />
+                              <ListView fx:id="films_list_view" prefHeight="460.0" prefWidth="270.0" />
                            </children>
                         </AnchorPane>
                     </content>
