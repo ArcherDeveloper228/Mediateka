@@ -7,6 +7,7 @@ import java.util.List;
 
 import client.Client;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -27,9 +28,9 @@ public class MediatekaController {
 	private Client client;
 	
 	/** Collection - images */
-	private List<Image> images;
+	private List<File> images;
 	
-	// логический блок дл€ инициализаиции коллекции
+	// логический блок дл€ инициализации коллекций
 	{ this.images = new LinkedList<>(); }
 	
 	@FXML
@@ -64,8 +65,29 @@ public class MediatekaController {
 		this.music_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 		// устанавливаем обработчик событи€ дл€ кнопки button_exit
-		this.button_exit.setOnAction(event -> this.button_exit.getScene().getWindow().hide() );
+		this.button_exit.setOnAction(event -> this.button_exit.getScene().getWindow().hide());
 
+		// устанавливаем обработчик событи€ дл€ полей ListView
+		this.images_list_view.setOnMouseClicked(event -> {
+			
+			// получаем объект String выбранного элемента пользователем
+			String title_image = this.images_list_view.getSelectionModel().getSelectedItem();
+			
+			// проходим по списку с элементами и ищем совпадение
+			for (File image : this.images) {
+				
+				// если совпаление найдено, то отображаем на картинку на экране
+				if (image.getName().equals(title_image))
+					try {
+						this.image_view.setImage(new Image(image.toURI().toURL().toString()));
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					}
+				
+			}
+			
+		});
+		
 		// устанавливаем обработчик событи€ дл€ кнопки button_add
 		this.button_add.setOnAction(event -> {
 
@@ -77,17 +99,30 @@ public class MediatekaController {
 			
 			for (Tab tab : tabs) {
 
+				// получаем название €чейки
 				title_tab = tab.getText();
 
 				switch (title_tab) {
 
-				case "Images": if (tab.isSelected()) files = this.makeFileChooser("View Pictures", title_tab);
-							   if (files != null) for (File file : files) this.images_list_view.getItems().add(file.getName());  
+				case "Images": if (tab.isSelected()) files = this.makeFileChooser("View Pictures", title_tab); else break;
+							   if (files != null) 
+								   for (File file : files) {
+								   
+									   if (this.checkFile(file, this.images)) {
+										   
+										   this.showDialogMessage("Attention", "A file with name \"" + file.getName() + "\" already exists!");
+										   continue;
+										   
+									   }
+									   this.images_list_view.getItems().add(file.getName());
+									   this.images.add(file);
+								   
+								   }  
 							   break;
-				case "Music":  if (tab.isSelected()) files = this.makeFileChooser("View Music", title_tab); 
+				case "Music":  if (tab.isSelected()) files = this.makeFileChooser("View Music", title_tab); else break;
 							   if (files != null) for (File file : files) this.music_list_view.getItems().add(file.getName()); 
 							   break;
-				case "Films":  if (tab.isSelected()) files = this.makeFileChooser("View Films", title_tab); 
+				case "Films":  if (tab.isSelected()) files = this.makeFileChooser("View Films", title_tab); else break;
 							   if (files != null) for (File file : files) this.films_list_view.getItems().add(file.getName());  
 							   break;
 
@@ -100,10 +135,53 @@ public class MediatekaController {
 		// устанавливаем обработчик событи€ дл€ кнопки button_delete
 		this.button_delete.setOnAction(event -> {
 
+			// получаем все €чейки TabPane
+			List<Tab> tabs = this.tab_pane.getTabs();	
+			// название выбранного Tab
+			String title_tab = null;
 
-
+			for (Tab tab : tabs) {
+				
+				// получаем название €чейки
+				title_tab = tab.getText();
+				
+				switch (title_tab) {
+				
+				case "Images":  if (tab.isSelected()) 
+									this.deleteElement(this.images_list_view.getSelectionModel().getSelectedItem() ,title_tab);
+								break;
+				case "Music": 
+								break;
+				case "Films": 
+								break;
+				
+				}
+				
+			}
+			
 		});
 
+	}
+	
+	public final void showDialogMessage(String title, String message) {
+
+    	Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText("");
+		alert.setContentText(message);
+		alert.showAndWait();
+
+    }
+	
+	private final boolean checkFile(File file, List<File> files) {
+		
+		boolean result = false;
+		
+		for (File new_file : files) 
+			if (new_file.getName().equals(file.getName())) result = true; 
+		
+		return result;
+		
 	}
 
 	/**
@@ -146,6 +224,28 @@ public class MediatekaController {
 
 		return list;
 
+	}
+	
+	private final boolean deleteElement(String element, String flag) {
+		
+		boolean result = true;
+		
+		switch (flag) {
+		
+		case "Images": result = this.images_list_view.getItems().remove(element); 
+					   for (File image : this.images) 
+					       if (image.getName().equals(element)) 
+					    	   if (!this.images.remove(image)) 
+					    		   return false;   
+					   break;
+					   
+		case "Music":  break;
+		case "Films":  break;
+		
+		}
+		
+		return result;
+		
 	}
 
 }
