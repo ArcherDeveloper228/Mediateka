@@ -1,12 +1,14 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
 import application.User;
+import json.FileCommand;
 import json.JsonParser;
 import json.UserComand;
 
@@ -88,6 +90,29 @@ public class ClientInterface implements ConstClient {
 		}
 
 		return user_command;
+
+	}
+
+	// реализация метода передачи файла серверу
+	@Override
+	public boolean writeFile(File file, String server_command) {
+
+		if (this.print_stream == null) return false;
+		else {
+
+			this.print_stream.println(this.json_parser.makeFileJson(file, server_command));
+			this.print_stream.flush();
+			return true;
+
+		}
+
+	}
+
+	// реализация метода чтения информации от сервера
+	@Override
+	public FileCommand readFile() {
+
+		return new FileCommand();
 
 	}
 
