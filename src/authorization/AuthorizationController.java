@@ -23,7 +23,7 @@ public class AuthorizationController implements ConstAuthorization {
 
 	/** Property - client */
 	private Client client;
-	
+
 	// выполняем пробное подключение  серверу
 	{
 		this.client = new Client();
@@ -47,7 +47,7 @@ public class AuthorizationController implements ConstAuthorization {
 
     @FXML
     private Label password_label;
-    
+
 	@FXML
     private void initialize() {
 
@@ -73,25 +73,26 @@ public class AuthorizationController implements ConstAuthorization {
     			User user = new User();
     			user.setUserLogin(this.login_field.getText().trim());
     			user.setUserPassword(this.passwrod_field.getText().trim());
-    			
+
     			this.client = new Client();
     			this.client.getClientInterface().writeMessage(user, TITLE_WINDOW);
-    			
+
     			UserComand user_command = this.client.getClientInterface().readMessage();
-    			
+
+    			// выполняем проверку ответа сервера на авторизацию клиента
     			if (user_command.getCommand().equals("Ok")) {
-    				
+
     				this.client.closeConnection();
     				this.button_signIn.getScene().getWindow().hide();
-    				new Mediateka().show();
-    				
+    				new Mediateka(user).show();
+
     			} else {
-    				
+
     				this.client.closeConnection();
     				this.passwrod_field.setText("");
     				this.showDialogMessage("Attention", user_command.getCommand());
-    				
-    			} 
+
+    			}
 
     		}
 

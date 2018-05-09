@@ -1,11 +1,15 @@
 package client;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+
+import javax.imageio.ImageIO;
 
 import application.User;
 import json.FileCommand;
@@ -65,7 +69,7 @@ public class ClientInterface implements ConstClient {
 		if (this.print_stream == null) return false;
 		else {
 
-			this.print_stream.println(this.json_parser.makeUserJson(user, server_command));
+			this.print_stream.println("User" + "\n" + this.json_parser.makeUserJson(user, server_command));
 			this.print_stream.flush();
 			return true;
 
@@ -95,12 +99,18 @@ public class ClientInterface implements ConstClient {
 
 	// реализация метода передачи файла серверу
 	@Override
-	public boolean writeFile(File file, String server_command) {
+	public boolean writeFile(File file, String user_login, String server_command) {
+
+		String file_name = null;
+		byte[] byte_array = null;
 
 		if (this.print_stream == null) return false;
 		else {
 
-			this.print_stream.println(this.json_parser.makeFileJson(file, server_command));
+			file_name = file.getName();
+			byte_array = this.getFileBytes(file);
+
+			this.print_stream.println("File" + "\n" + this.json_parser.makeFileJson(byte_array, file_name, user_login, server_command));
 			this.print_stream.flush();
 			return true;
 
@@ -113,6 +123,50 @@ public class ClientInterface implements ConstClient {
 	public FileCommand readFile() {
 
 		return new FileCommand();
+
+	}
+
+	/**
+	 * This method return array file bytes
+	 * @param file value of the object File
+	 * @return array file bytes
+	 * */
+	public byte[] getFileBytes(File file) {
+
+		byte[] file_bytes = null;
+		String extension = null;
+
+		try {
+
+			extension = this.getFileExtension(file);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			BufferedImage buffered_image = ImageIO.read(file);
+
+			ImageIO.write(buffered_image, extension, baos);
+			file_bytes = baos.toByteArray();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return file_bytes;
+
+	}
+
+	/**
+	 * This method return file extension
+	 * @param file value of the object File
+	 * @return value of the object String
+	 * */
+	private final String getFileExtension(File file) {
+
+        String fileName = file.getName();
+        // если в имени файла есть точка и она не является первым символом в названии файла
+        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+        // то вырезаем все знаки после последней точки в названии файла, то есть ХХХХХ.txt -> txt
+        return fileName.substring(fileName.lastIndexOf(".")+1);
+        // в противном случае возвращаем заглушку, то есть расширение не найдено
+        else return "";
 
 	}
 
