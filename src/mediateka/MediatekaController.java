@@ -106,6 +106,7 @@ public class MediatekaController {
 			// коллекция для считываемых файлов
 			List<File> files = null;
 			String title_tab = null;
+			String message = null;
 
 			for (Tab tab : tabs) {
 
@@ -117,16 +118,9 @@ public class MediatekaController {
 				case "Images": if (tab.isSelected()) files = this.makeFileChooser("View Pictures", title_tab); else break;
 							   if (files != null)
 								   for (File file : files) {
-
-									   if (this.checkFile(file, this.images)) {
-
-										   this.showDialogMessage("Attention", "A file with name \"" + file.getName() + "\" already exists!");
-										   continue;
-
-									   }
-
-									   this.addFile(file, this.user.getUserLogin(), title_tab);
-
+									   if (!(message = this.addFile(file, this.user.getUserLogin(), title_tab)).equals("Ok")) {
+										   this.showDialogMessage("Attention", message);
+									   } 
 								   }
 							   break;
 				case "Music":  if (tab.isSelected()) files = this.makeFileChooser("View Music", title_tab); else break;
@@ -188,43 +182,29 @@ public class MediatekaController {
 
     }
 
-	private boolean addFile(File file, String user_login, String flag) {
+	private String addFile(File file, String user_login, String flag) {
 
-		//FileCommand file_command = null;
-
+		String message = null;
+		
 		switch (flag) {
 
 		case "Images": // отправляем файл серверу
 			   		   this.client = new Client();
 			   		   this.client.getClientInterface().writeFile(file, user_login, "AddImage");
 			   		   // ждем ответа сервера
-			   		   this.images_list_view.getItems().add(file.getName());
-					   // добавляем объект File в коллекцию images
-					   this.images.add(file);
+			   		   message = this.client.getClientInterface().readMessage().getCommand();
+			   		   if (message.equals("Ok")) {
+			   			   this.images_list_view.getItems().add(file.getName());
+						   // добавляем объект File в коллекцию images
+						   this.images.add(file);
+			   		   } else ;
 					   break;
-		case "Music": break;
-		case "Films": break;
+		case "Music":  break;
+		case "Films":  break;
 
 		}
 
-		return true;
-
-	}
-
-	/**
-	 * This method check duplicate files
-	 * @param file value of the object File
-	 * @param files collection
-	 * @return boolean value
-	 * */
-	private final boolean checkFile(File file, List<File> files) {
-
-		boolean result = false;
-
-		for (File new_file : files)
-			if (new_file.getName().equals(file.getName())) result = true;
-
-		return result;
+		return message;
 
 	}
 
