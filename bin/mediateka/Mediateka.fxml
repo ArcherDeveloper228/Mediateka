@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -68,15 +67,5 @@
             <Font name="Georgia" size="55.0" />
          </font>
       </Label>
-      <ImageView fitHeight="82.0" fitWidth="107.0" layoutX="46.0" layoutY="15.0">
-         <image>
-            <Image url="@../authorization/cd.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="82.0" fitWidth="107.0" layoutX="794.0" layoutY="15.0">
-         <image>
-            <Image url="@../authorization/cd.png" />
-         </image>
-      </ImageView>
    </children>
 </AnchorPane>

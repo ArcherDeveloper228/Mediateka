@@ -12,6 +12,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import json.UserComand;
+import mediateka.Mediateka;
 
 /** Class-controller for .fxml document "Registration.fxml"
  * @author Nikita.Ustyshenko
@@ -129,8 +130,10 @@ public class RegistrationController implements ConstRegistration {
 
 			} else {
 
+				User user = this.makeUser();
+				
 				this.client = new Client();
-				this.client.getClientInterface().writeMessage(this.makeUser(), TITLE_WINDOW);
+				this.client.getClientInterface().writeMessage(user, TITLE_WINDOW);
 				
 				UserComand user_command = this.client.getClientInterface().readMessage();
 
@@ -138,6 +141,7 @@ public class RegistrationController implements ConstRegistration {
 					
 					this.client.closeConnection();
 					this.button_registration.getScene().getWindow().hide();
+					new Mediateka(user).show();
 					
 				}
 				else {

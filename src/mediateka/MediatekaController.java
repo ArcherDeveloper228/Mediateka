@@ -1,7 +1,6 @@
 package mediateka;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +17,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import json.FileCommand;
 
 /**
  * Class-controller for .fxml document "Mediateka.fxml"
@@ -86,7 +84,7 @@ public class MediatekaController {
 			// проходим по списку с элементами и ищем совпадение
 			for (File image : this.images) {
 
-				// если совпаление найдено, то отображаем на картинку на экране
+				// если совпаление найдено, то отображаем картинку на экране
 				if (image.getName().equals(title_image))
 					try {
 						this.image_view.setImage(new Image(image.toURI().toURL().toString()));
@@ -143,6 +141,8 @@ public class MediatekaController {
 			List<Tab> tabs = this.tab_pane.getTabs();
 			// название выбранного Tab
 			String title_tab = null;
+			// сообщение отправленное от сервера клиенту 
+			String message = null;
 
 			for (Tab tab : tabs) {
 
@@ -151,8 +151,11 @@ public class MediatekaController {
 
 				switch (title_tab) {
 
-				case "Images":  if (tab.isSelected())
-									this.deleteElement(this.images_list_view.getSelectionModel().getSelectedItem() ,title_tab);
+				case "Images":  if (tab.isSelected()) 
+									if(!(message = 
+										this.deleteElement(this.images_list_view.getSelectionModel().getSelectedItem() ,title_tab)).equals("Ok"))
+											this.showDialogMessage("Attention", message);
+									
 								break;
 				case "Music":
 								break;
@@ -182,6 +185,9 @@ public class MediatekaController {
 
     }
 
+	/**
+	 * This method 
+	 * */
 	private String addFile(File file, String user_login, String flag) {
 
 		String message = null;
@@ -193,6 +199,7 @@ public class MediatekaController {
 			   		   this.client.getClientInterface().writeFile(file, user_login, "AddImage");
 			   		   // ждем ответа сервера
 			   		   message = this.client.getClientInterface().readMessage().getCommand();
+			   		   this.client.closeConnection();
 			   		   if (message.equals("Ok")) {
 			   			   this.images_list_view.getItems().add(file.getName());
 						   // добавляем объект File в коллекцию images
@@ -256,17 +263,29 @@ public class MediatekaController {
 	 * @param flag value of the object String what contains information about flag for action
 	 * @return boolean value
 	 * */
-	private final boolean deleteElement(String element, String flag) {
+	private final String deleteElement(String element, String flag) {
 
-		boolean result = true;
+	    String message = null;
 
 		switch (flag) {
 
-		case "Images": result = this.images_list_view.getItems().remove(element);
-					   for (File image : this.images)
-					       if (image.getName().equals(element))
-					    	   if (!this.images.remove(image))
-					    		   return false;
+		case "Images": // выполняем соединение с сервером, чтобы послать запрос
+					   this.client = new Client();
+					   // отправляем запрос на удаление файла серверу
+					   this.client.getClientInterface().writeFile(new File(element), this.user.getUserLogin(), "DeleteImage");
+					   // ждем ответа сервера
+					   message = this.client.getClientInterface().readMessage().getCommand();
+					   this.client.closeConnection();
+					   if (message.equals("Ok")) {
+						   // удаляем элемент из ListView
+						   this.images_list_view.getItems().remove(element);
+						   for (File file : this.images) 
+							   if (file.getName().equals(element)) {
+								   this.images.remove(file);
+								   this.image_view.setImage(null);
+								   break;
+							   }
+					   } else ;
 					   break;
 
 		case "Music":  break;
@@ -274,7 +293,7 @@ public class MediatekaController {
 
 		}
 
-		return result;
+		return message;
 
 	}
 

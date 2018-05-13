@@ -19,7 +19,6 @@ public class Client {
 	private static int port = 9999;
 
 	/** Property - address */
-	//private static String address;
 	private static String address = new String("127.0.0.1");
 
 	/** Property - client_interface */
