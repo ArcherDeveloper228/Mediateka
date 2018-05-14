@@ -1,6 +1,6 @@
 package application;
 
-import authorization.Authorization;
+import client.ClientConnection;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -12,7 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 
-		primaryStage = new Authorization();
+		primaryStage = new ClientConnection();
 		this.stage = primaryStage;
 
 	}

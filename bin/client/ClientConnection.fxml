@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="184.0" prefWidth="252.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ClientConnectionController">
+   <children>
+      <Button fx:id="button_connection" layoutX="84.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Connection" />
+      <TextField fx:id="port_text_field" layoutX="64.0" layoutY="100.0" />
+      <TextField fx:id="id_text_field" layoutX="64.0" layoutY="63.0" />
+      <Label layoutX="29.0" layoutY="67.0" prefHeight="17.0" prefWidth="21.0" text="Ip:" />
+      <Label layoutX="29.0" layoutY="104.0" prefHeight="17.0" prefWidth="33.0" text="Port:" />
+      <Label layoutX="78.0" layoutY="14.0" prefHeight="31.0" prefWidth="96.0" text="Connect">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

@@ -111,7 +111,7 @@ public class RegistrationController implements ConstRegistration {
 
 			if (this.client != null) this.client.closeConnection();
 			this.button_cancel.getScene().getWindow().hide();
-			new Authorization().show();
+			new Authorization();
 
 		});
 
@@ -141,7 +141,7 @@ public class RegistrationController implements ConstRegistration {
 					
 					this.client.closeConnection();
 					this.button_registration.getScene().getWindow().hide();
-					new Mediateka(user).show();
+					new Mediateka(user);
 					
 				}
 				else {

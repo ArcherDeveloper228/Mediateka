@@ -34,8 +34,10 @@ public class MediatekaController {
 	/** Collection - images */
 	private List<File> images;
 
+	/** Collection - music */
 	private List<File> music;
 
+	/** Collection - films */
 	private List<File> films;
 
 	// логический блок для инициализации коллекций
@@ -68,6 +70,8 @@ public class MediatekaController {
 	@FXML
 	private void initialize() {
 
+		this.button_add.setDisable(true);
+		
 		this.images_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		this.films_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		this.music_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -167,9 +171,11 @@ public class MediatekaController {
 			}
 
 		});
-
+		
+		
+		
 	}
-
+	
 	/**
      * This method creates dialog window and prints information
      * @param title value of the window title
@@ -186,7 +192,11 @@ public class MediatekaController {
     }
 
 	/**
-	 * This method 
+	 * This method send file into the server
+	 * @param file 
+	 * @param user_login value of the object String what contains information about user login
+	 * @param flag value of the object String what contains information about flag
+	 * @return value of the object String what contains information about message
 	 * */
 	private String addFile(File file, String user_login, String flag) {
 

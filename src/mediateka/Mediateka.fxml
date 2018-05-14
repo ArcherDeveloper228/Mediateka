@@ -60,6 +60,11 @@
                   <Font name="Georgia" size="15.0" />
                </font>
             </Button>
+            <Button fx:id="button_update" layoutX="721.0" layoutY="518.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="107.0" style="-fx-background-radius: 10; -fx-background-color: #F4A460; -fx-border-color: #696969; -fx-border-radius: 10;" text="Update">
+               <font>
+                  <Font name="Georgia" size="15.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <Label layoutX="184.0" layoutY="24.0" text="Welcome to UstMEDIA" textFill="WHITE">

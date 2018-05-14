@@ -16,10 +16,12 @@ import javafx.scene.control.Alert;
 public class Client {
 
 	/** Property - port */
-	private static int port = 9999;
+	//private static int port = 9999;
+	private static int port;
 
 	/** Property - address */
-	private static String address = new String("127.0.0.1");
+	//private static String address = new String("127.0.0.1");
+	private static String ip_address;
 
 	/** Property - client_interface */
 	private ClientInterface client_interface;
@@ -37,7 +39,7 @@ public class Client {
 
 		try {
 
-			this.socket = new Socket(InetAddress.getByName(address), port);
+			this.socket = new Socket(InetAddress.getByName(ip_address), port);
 			this.client_interface  = new ClientInterface(this.socket);
 
 		} catch (ConnectException e1) {
@@ -130,6 +132,49 @@ public class Client {
 
 		this.socket = socket;
 
+	}
+	
+	/**
+	 * This method return value of the port 
+	 * @return port value of the port
+	 * */
+	public static int getPort() {
+		
+		return port;
+		
+	}
+	
+	/**
+	 * This method set value of the port
+	 * @param new_port value of the new port
+	 * */
+	public static void setPort(int new_port) {
+		
+		port = new_port;
+		
+	}
+	
+	/**
+	 * This method return value of the object String 
+	 * what contains information about ip address 
+	 * @return value of the object String what contains information about ip address
+	 * */
+	public static String getIpAddress() {
+		
+		return ip_address;
+		
+	}
+	
+	/**
+	 * This method set value of the object String
+	 * what contains information about ip address
+	 * @param new_ip_address value of the object String 
+	 * what contains information about ip address
+	 * */
+	public static void setIpAddress(String new_ip_address) {
+		
+		ip_address = new String(new_ip_address);
+		
 	}
 
 }

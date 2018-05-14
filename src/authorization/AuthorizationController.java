@@ -56,7 +56,7 @@ public class AuthorizationController implements ConstAuthorization {
 
     		if (this.client != null) this.client.closeConnection();
     		this.registration_hyperlink.getScene().getWindow().hide();
-    		new Registration().show();
+    		new Registration();
 
     	});
 
@@ -84,7 +84,7 @@ public class AuthorizationController implements ConstAuthorization {
 
     				this.client.closeConnection();
     				this.button_signIn.getScene().getWindow().hide();
-    				new Mediateka(user).show();
+    				new Mediateka(user);
 
     			} else {
 
