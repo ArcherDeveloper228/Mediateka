@@ -107,11 +107,23 @@ public class ClientInterface implements ConstClient {
 		if (this.print_stream == null) return false;
 		else {
 
-			file_name = file.getName();
-			byte_array = this.getFileBytes(file);
+			if (file != null) {
 
-			this.print_stream.println("File" + "\n" + this.json_parser.makeFileJson(byte_array, file_name, user_login, server_command));
-			this.print_stream.flush();
+				file_name = file.getName();
+				byte_array = this.getFileBytes(file);
+
+				this.print_stream.println("File" + "\n" + this.json_parser.makeFileJson(byte_array, file_name, user_login, server_command));
+				this.print_stream.flush();
+
+			} else {
+
+				System.out.println("ya tut");
+				this.print_stream.println("File" + "\n" + this.json_parser.makeFileJson(byte_array, file_name, user_login, server_command));
+				this.print_stream.flush();
+
+			}
+
+
 			return true;
 
 		}

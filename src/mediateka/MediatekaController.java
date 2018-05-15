@@ -48,6 +48,9 @@ public class MediatekaController {
 
 	@FXML
 	private Button button_exit;
+	
+	@FXML 
+	private Button button_update;
 
 	@FXML
 	private Button button_delete;
@@ -70,7 +73,7 @@ public class MediatekaController {
 	@FXML
 	private void initialize() {
 
-		this.button_add.setDisable(true);
+	//	this.button_add.setDisable(true);
 		
 		this.images_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		this.films_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -172,7 +175,18 @@ public class MediatekaController {
 
 		});
 		
-		
+		// устанавливаем обработчик события для кнопки button_update
+		this.button_update.setOnAction(event -> {
+			
+			// запуск потока загрузки 
+			new Thread(() -> {
+				
+				this.client.getClientInterface().writeFile(null, this.user.getUserLogin(), "LoadImages");
+				
+				
+			});
+			
+		});
 		
 	}
 	
