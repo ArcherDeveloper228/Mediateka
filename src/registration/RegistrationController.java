@@ -70,7 +70,7 @@ public class RegistrationController implements ConstRegistration {
 
 	@FXML
 	private void initialize() {
-
+		
 		// добавляем значения в ComboBox year_box
 		for (int i = 2018; i >= 1990; i--) this.year_box.getItems().add(i);
 

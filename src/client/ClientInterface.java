@@ -7,13 +7,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.lang.reflect.Type;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
 import application.User;
-import json.FileCommand;
+import json.Container;
 import json.JsonParser;
+import json.ListFiles;
 import json.UserComand;
 
 public class ClientInterface implements ConstClient {
@@ -117,12 +124,10 @@ public class ClientInterface implements ConstClient {
 
 			} else {
 
-				System.out.println("ya tut");
 				this.print_stream.println("File" + "\n" + this.json_parser.makeFileJson(byte_array, file_name, user_login, server_command));
 				this.print_stream.flush();
 
 			}
-
 
 			return true;
 
@@ -132,9 +137,23 @@ public class ClientInterface implements ConstClient {
 
 	// реализация метода чтения информации от сервера
 	@Override
-	public FileCommand readFile() {
+	public Container readFile() {
 
-		return new FileCommand();
+		Container files = null;
+		String json = null;
+
+		try {
+
+			if ((json = this.buffered_reader.readLine()) != null)
+				files = this.json_parser.getGson().fromJson(json, Container.class);
+
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return files;
 
 	}
 

@@ -1,9 +1,14 @@
 package mediateka;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import application.User;
 import client.Client;
@@ -17,6 +22,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import json.Container;
+import json.ListFiles;
 
 /**
  * Class-controller for .fxml document "Mediateka.fxml"
@@ -48,8 +55,8 @@ public class MediatekaController {
 
 	@FXML
 	private Button button_exit;
-	
-	@FXML 
+
+	@FXML
 	private Button button_update;
 
 	@FXML
@@ -73,8 +80,8 @@ public class MediatekaController {
 	@FXML
 	private void initialize() {
 
-	//	this.button_add.setDisable(true);
-		
+		this.button_add.setDisable(true);
+
 		this.images_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		this.films_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		this.music_list_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -125,7 +132,7 @@ public class MediatekaController {
 								   for (File file : files) {
 									   if (!(message = this.addFile(file, this.user.getUserLogin(), title_tab)).equals("Ok")) {
 										   this.showDialogMessage("Attention", message);
-									   } 
+									   }
 								   }
 							   break;
 				case "Music":  if (tab.isSelected()) files = this.makeFileChooser("View Music", title_tab); else break;
@@ -148,7 +155,7 @@ public class MediatekaController {
 			List<Tab> tabs = this.tab_pane.getTabs();
 			// название выбранного Tab
 			String title_tab = null;
-			// сообщение отправленное от сервера клиенту 
+			// сообщение отправленное от сервера клиенту
 			String message = null;
 
 			for (Tab tab : tabs) {
@@ -158,11 +165,11 @@ public class MediatekaController {
 
 				switch (title_tab) {
 
-				case "Images":  if (tab.isSelected()) 
-									if(!(message = 
+				case "Images":  if (tab.isSelected())
+									if(!(message =
 										this.deleteElement(this.images_list_view.getSelectionModel().getSelectedItem() ,title_tab)).equals("Ok"))
 											this.showDialogMessage("Attention", message);
-									
+
 								break;
 				case "Music":
 								break;
@@ -174,22 +181,50 @@ public class MediatekaController {
 			}
 
 		});
-		
+
 		// устанавливаем обработчик события для кнопки button_update
 		this.button_update.setOnAction(event -> {
-			
-			// запуск потока загрузки 
-			new Thread(() -> {
-				
-				this.client.getClientInterface().writeFile(null, this.user.getUserLogin(), "LoadImages");
-				
-				
-			});
-			
+
+		    Container files = null;
+			BufferedImage buffered_image = null;
+			File file = null;
+
+			// устанавливаем соединение с сервером
+			this.client = new Client();
+
+			this.client.getClientInterface().writeFile(null, this.user.getUserLogin(), "LoadImages");
+			files = this.client.getClientInterface().readFile();
+			// разрываем соединение с сервером
+			this.client.closeConnection();
+			// устанавливаем кнопку добавления доступной
+			this.button_add.setDisable(false);
+			// утсанавливаем кнопку обновления информации недоступной
+			this.button_update.setDisable(true);
+
+			// если есть информация, которую можно загрузить с сервера
+			if (files != null) {
+
+				for (ListFiles list_file : files.getContainer()) {
+
+					this.images_list_view.getItems().add(list_file.getFileName());
+
+					try {
+						buffered_image = ImageIO.read(new ByteArrayInputStream(list_file.getByteArray()));
+						ImageIO.write(buffered_image, this.getFileExtension(list_file.getFileName()), (file = new File(list_file.getFileName())));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					this.images.add(file);
+
+				}
+
+			}
+
 		});
-		
+
 	}
-	
+
 	/**
      * This method creates dialog window and prints information
      * @param title value of the window title
@@ -207,7 +242,7 @@ public class MediatekaController {
 
 	/**
 	 * This method send file into the server
-	 * @param file 
+	 * @param file
 	 * @param user_login value of the object String what contains information about user login
 	 * @param flag value of the object String what contains information about flag
 	 * @return value of the object String what contains information about message
@@ -215,7 +250,7 @@ public class MediatekaController {
 	private String addFile(File file, String user_login, String flag) {
 
 		String message = null;
-		
+
 		switch (flag) {
 
 		case "Images": // отправляем файл серверу
@@ -303,7 +338,7 @@ public class MediatekaController {
 					   if (message.equals("Ok")) {
 						   // удаляем элемент из ListView
 						   this.images_list_view.getItems().remove(element);
-						   for (File file : this.images) 
+						   for (File file : this.images)
 							   if (file.getName().equals(element)) {
 								   this.images.remove(file);
 								   this.image_view.setImage(null);
@@ -318,6 +353,22 @@ public class MediatekaController {
 		}
 
 		return message;
+
+	}
+
+	/**
+	 * This method return file extension
+	 * @param file_name value of the object String
+	 * @return value of the object String
+	 * */
+	private final String getFileExtension(String file_name) {
+
+        // если в имени файла есть точка и она не является первым символом в названии файла
+        if(file_name.lastIndexOf(".") != -1 && file_name.lastIndexOf(".") != 0)
+        // то вырезаем все знаки после последней точки в названии файла, то есть ХХХХХ.txt -> txt
+        return file_name.substring(file_name.lastIndexOf(".")+1);
+        // в противном случае возвращаем заглушку, то есть расширение не найдено
+        else return "";
 
 	}
 

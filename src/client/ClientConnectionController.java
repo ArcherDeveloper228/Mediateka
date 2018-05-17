@@ -25,6 +25,11 @@ public class ClientConnectionController {
 	@FXML
 	private void initialize() {
 		
+		// устанавливаем фокус для графических элементов
+		this.id_text_field.setFocusTraversable(true);
+		this.port_text_field.setFocusTraversable(false);
+		this.button_connection.setFocusTraversable(false);
+		
 		// устанавливаем обработчик события для кнопки button_connection
 		this.button_connection.setOnAction(event -> {
 			

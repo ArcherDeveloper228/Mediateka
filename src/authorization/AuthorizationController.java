@@ -51,6 +51,11 @@ public class AuthorizationController implements ConstAuthorization {
 	@FXML
     private void initialize() {
 
+		// устанавливаем фокус для графических элементов окна
+		this.button_signIn.setFocusTraversable(false);
+		this.passwrod_field.setFocusTraversable(false);
+		this.login_field.setFocusTraversable(true);
+
     	// устанавливаем обработчик события для гиперссылки  registrationHyperlink
     	this.registration_hyperlink.setOnAction(event -> {
 
