@@ -21,6 +21,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import json.Container;
 import json.ListFiles;
@@ -30,7 +32,7 @@ import json.ListFiles;
  * @author Nikita.Ustyushenko
  * @version 1.0
  * */
-public class MediatekaController {
+public class MediatekaController implements ConstMediateka  {
 
 	/** Property - user */
 	private User user;
@@ -58,6 +60,9 @@ public class MediatekaController {
 
 	@FXML
 	private Button button_update;
+
+	@FXML
+	private Button button_play;
 
 	@FXML
 	private Button button_delete;
@@ -129,14 +134,15 @@ public class MediatekaController {
 
 				case "Images": if (tab.isSelected()) files = this.makeFileChooser("View Pictures", title_tab); else break;
 							   if (files != null)
-								   for (File file : files) {
-									   if (!(message = this.addFile(file, this.user.getUserLogin(), title_tab)).equals("Ok")) {
-										   this.showDialogMessage("Attention", message);
-									   }
-								   }
+								   for (File file : files) 
+									   if (!(message = this.addFile(file, this.user.getUserLogin(), title_tab)).equals("Ok")) 
+										   this.showDialogMessage("Attention", message);   								   
 							   break;
 				case "Music":  if (tab.isSelected()) files = this.makeFileChooser("View Music", title_tab); else break;
-							   if (files != null) for (File file : files) this.music_list_view.getItems().add(file.getName());
+							   if (files != null) 
+								   for (File file : files) 
+									   if (!(message = this.addFile(file, this.user.getUserLogin(), title_tab)).equals("Ok"))
+										   this.showDialogMessage("Attention", message);
 							   break;
 				case "Films":  if (tab.isSelected()) files = this.makeFileChooser("View Films", title_tab); else break;
 							   if (files != null) for (File file : files) this.films_list_view.getItems().add(file.getName());
@@ -207,10 +213,16 @@ public class MediatekaController {
 				for (ListFiles list_file : files.getContainer()) {
 
 					this.images_list_view.getItems().add(list_file.getFileName());
-
+					
+					file = new File(CURRENT_DIRECTORY + "\\images");
+					if (!file.exists()) file.mkdir();
+					file = new File(file.getPath() + "\\" + user.getUserLogin());
+					if (!file.exists()) file.mkdir(); 
+					
 					try {
 						buffered_image = ImageIO.read(new ByteArrayInputStream(list_file.getByteArray()));
-						ImageIO.write(buffered_image, this.getFileExtension(list_file.getFileName()), (file = new File(list_file.getFileName())));
+						ImageIO.write(buffered_image, this.getFileExtension(list_file.getFileName()), (file = new File(file.getPath() + 
+							"\\" + list_file.getFileName())));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -221,6 +233,15 @@ public class MediatekaController {
 
 			}
 
+		});
+		
+		this.button_play.setOnAction(event -> {
+			
+			String file = "C:\\Users\\Nikita\\Music\\ЛСП – 2. Малышка Любит Дилера.(Живи Люби Погибай и помни).mp3";
+			Media sound = new Media(new File(file).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
+			
 		});
 
 	}
@@ -258,6 +279,7 @@ public class MediatekaController {
 			   		   this.client.getClientInterface().writeFile(file, user_login, "AddImage");
 			   		   // ждем ответа сервера
 			   		   message = this.client.getClientInterface().readMessage().getCommand();
+			   		   // разрываем соединение с сервером
 			   		   this.client.closeConnection();
 			   		   if (message.equals("Ok")) {
 			   			   this.images_list_view.getItems().add(file.getName());
@@ -265,7 +287,19 @@ public class MediatekaController {
 						   this.images.add(file);
 			   		   } else ;
 					   break;
-		case "Music":  break;
+		case "Music":  // отправляем файл серверу
+					   this.client = new Client();
+			           this.client.getClientInterface().writeFile(file, user_login, "AddMusic");
+			           // ждем ответа сервера
+			           message = this.client.getClientInterface().readMessage().getCommand();
+			           // разрываем соединение с сервером
+			           this.client.closeConnection();
+			           if (message.equals("Ok")) {
+			        	   this.music_list_view.getItems().add(file.getName());
+			        	   // добавляем объект File в коллекцию music
+			        	   this.music.add(file);
+			           }
+					   break;
 		case "Films":  break;
 
 		}

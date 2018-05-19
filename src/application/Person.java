@@ -174,7 +174,7 @@ public class Person {
 	public String getSex() {
 
 		return this.sex;
-
+		
 	}
 
 	/**

@@ -4,23 +4,19 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.lang.reflect.Type;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 import application.User;
 import json.Container;
 import json.JsonParser;
-import json.ListFiles;
 import json.UserComand;
 
 public class ClientInterface implements ConstClient {
@@ -117,7 +113,9 @@ public class ClientInterface implements ConstClient {
 			if (file != null) {
 
 				file_name = file.getName();
-				byte_array = this.getFileBytes(file);
+				if (server_command.equals("AddImage") || server_command.equals("LoadImage") || server_command.equals("DeleteImage"))
+					byte_array = this.getImageBytes(file);
+				else byte_array = this.getFileBytes(file);
 
 				this.print_stream.println("File" + "\n" + this.json_parser.makeFileJson(byte_array, file_name, user_login, server_command));
 				this.print_stream.flush();
@@ -158,11 +156,11 @@ public class ClientInterface implements ConstClient {
 	}
 
 	/**
-	 * This method return array file bytes
+	 * This method return array image bytes
 	 * @param file value of the object File
-	 * @return array file bytes
+	 * @return array image bytes
 	 * */
-	public byte[] getFileBytes(File file) {
+	public byte[] getImageBytes(File file) {
 
 		byte[] file_bytes = null;
 		String extension = null;
@@ -182,6 +180,29 @@ public class ClientInterface implements ConstClient {
 
 		return file_bytes;
 
+	}
+	
+	/**
+	 * This method return array file bytes
+	 * @param file value of the object File
+	 * @return array file bytes
+	 * */
+	public byte[] getFileBytes(File file) {
+		
+		byte[] file_bytes = new byte[(int) file.length()];
+		
+		try {
+			
+			FileInputStream file_input_stream = new FileInputStream(file);
+			file_input_stream.read(file_bytes);
+			file_input_stream.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return file_bytes;
+		
 	}
 
 	/**
